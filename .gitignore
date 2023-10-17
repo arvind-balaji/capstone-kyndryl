@@ -1,37 +1,37 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/langchain-nextjs-template/node_modules
-/langchain-nextjs-template/.pnp
-/langchain-nextjs-template/.pnp.js
+/main/node_modules
+/main/.pnp
+/main/.pnp.js
 
 # testing
-/langchain-nextjs-template/coverage
+/main/coverage
 
 # next.js
-/langchain-nextjs-template/.next/
-/langchain-nextjs-template/out/
+/main/.next/
+/main/out/
 
 # production
-/langchain-nextjs-template/build
+/main/build
 
 # misc
 .DS_Store
 *.pem
 
 # debug
-/langchain-nextjs-template/npm-debug.log*
-/langchain-nextjs-template/yarn-debug.log*
-/langchain-nextjs-template/yarn-error.log*
+/main/npm-debug.log*
+/main/yarn-debug.log*
+/main/yarn-error.log*
 
 # local env files
-/langchain-nextjs-template/.env*.local
+/main/.env*.local
 
 # vercel
-/langchain-nextjs-template/.vercel
+/main/.vercel
 
 # typescript
-/langchain-nextjs-template/*.tsbuildinfo
-/langchain-nextjs-template/next-env.d.ts
+/main/*.tsbuildinfo
+/main/next-env.d.ts
 
-/langchain-nextjs-template/.yarn
+/main/.yarn

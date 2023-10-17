@@ -3,7 +3,10 @@ import { ChatWindow } from "@/components/ChatWindow";
 export default function AgentsPage() {
   const InfoCard = (
     <div className="p-4 md:p-8 rounded bg-[#25252d] w-full max-h-[85%] overflow-hidden">
-      <h1 className="text-3xl md:text-4xl mb-4">
+      <h1 className="text-3xl md:text-4xl">
+        🤖 Upload your document and ask me anything!
+      </h1>
+      {/* <h1 className="text-3xl md:text-4xl mb-4">
         ▲ Next.js + LangChain.js Retrieval Chain 🦜🔗
       </h1>
       <ul>
@@ -95,7 +98,7 @@ export default function AgentsPage() {
             <code>What is a document loader?</code> below!
           </span>
         </li>
-      </ul>
+      </ul> */}
     </div>
   );
   return (
@@ -104,10 +107,10 @@ export default function AgentsPage() {
       emptyStateComponent={InfoCard}
       showIngestForm={true}
       placeholder={
-        'I\'ve got a nose for finding the right documents! Ask, "What is a document loader?"'
+        'What can I help you with?'
       }
-      emoji="🐶"
-      titleText="Dana the Document-Retrieving Dog"
+      emoji="🤖"
+      titleText="Bob the Document-Retrieving Robot"
     ></ChatWindow>
   );
 }
