@@ -35,25 +35,32 @@ const loader = new DirectoryLoader(
 );
 const docs = await loader.load();
 console.log({ docs });
-
+/* TO-DO:
+Get chunkSize fromthe frontend client side
+*/
 const textSplitter = new RecursiveCharacterTextSplitter({
   chunkSize: 20,
   chunkOverlap: 0,
 });
 
 const splitDocs = await textSplitter.splitDocuments(docs);
-console.log(splitDocs)
+// TO-DO: replace FILE_NAME_FROM_FRONTEND once pipeline is supported
+for (let i = 0; i < splitDocs.length; i++) {
+  splitDocs[i].metadata.file_name = "FILE_NAME_FROM_FRONTEND";
+  line_from = splitDocs[i].metadata.loc.lines.from
+  line_to = splitDocs[i].metadata.loc.lines.to
+}
+
 const embeddings = new OpenAIEmbeddings({
   openAIApiKey: process.env.OPENAI_API_KEY,
 });
-// console.log(embeddings)
-// const vectorStore = await SupabaseVectorStore.fromDocuments(splitDocs, embeddings);
+
 const privateKey = process.env.SUPABASE_PRIVATE_KEY;
 if (!privateKey) throw new Error(`Expected env var SUPABASE_PRIVATE_KEY`);
 
 const url = process.env.SUPABASE_URL;
 if (!url) throw new Error(`Expected env var SUPABASE_URL`);
-// export const run = async () => {
+
 const client = createClient(url, privateKey);
 
 const store = new SupabaseVectorStore(embeddings, {
@@ -61,44 +68,3 @@ const store = new SupabaseVectorStore(embeddings, {
   tableName: "documents",
 });
 await store.addDocuments(splitDocs);
-
-// const resultOne = await vectorStore.similaritySearch("Hello world", 1);
-
-// console.log(resultOne);
-// };
-// export const run = async () => {
-//   const client = createClient(url, privateKey);
-
-//   const vectorStore = await SupabaseVectorStore.fromDocuments(
-//     splitDocs,
-//     embeddings,
-//     // {
-//     //   client,
-//     //   tableName: "documents",
-//     //   queryName: "match_documents",
-//     // }
-//   );
-//   console.log("maybe successful")
-  // const resultOne = await vectorStore.similaritySearch("Hello world", 1);
-
-  // console.log(resultOne);
-// };
-// const resultOne = await vectorStore.similaritySearch("hello world", 1);
-
-// console.log(resultOne);
-// const llm = new OpenAI({
-//   openAIApiKey: "YOUR_KEY_HERE",
-//   temperature: 0.9,
-// });
-
-// const chatModel = new ChatOpenAI();
-
-// const text =
-//   "What would be a good company name for a company that makes colorful socks?";
-
-// const llmResult = await llm.predict(text);
-/*
-  "Feetful of Fun"
-*/
-
-// const chatModelResult = await chatModel.predict(text);
