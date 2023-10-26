@@ -39,16 +39,14 @@ console.log({ docs });
 Get chunkSize fromthe frontend client side
 */
 const textSplitter = new RecursiveCharacterTextSplitter({
-  chunkSize: 20,
-  chunkOverlap: 0,
+  chunkSize: 256,
+  chunkOverlap: 20,
 });
 
 const splitDocs = await textSplitter.splitDocuments(docs);
 // TO-DO: replace FILE_NAME_FROM_FRONTEND once pipeline is supported
 for (let i = 0; i < splitDocs.length; i++) {
   splitDocs[i].metadata.file_name = "FILE_NAME_FROM_FRONTEND";
-  line_from = splitDocs[i].metadata.loc.lines.from
-  line_to = splitDocs[i].metadata.loc.lines.to
   splitDocs[i].metadata.type = "file_upload";
 }
 
