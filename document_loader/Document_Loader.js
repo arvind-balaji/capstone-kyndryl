@@ -49,6 +49,7 @@ for (let i = 0; i < splitDocs.length; i++) {
   splitDocs[i].metadata.file_name = "FILE_NAME_FROM_FRONTEND";
   line_from = splitDocs[i].metadata.loc.lines.from
   line_to = splitDocs[i].metadata.loc.lines.to
+  splitDocs[i].metadata.type = "file_upload";
 }
 
 const embeddings = new OpenAIEmbeddings({
