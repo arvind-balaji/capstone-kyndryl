@@ -11,6 +11,7 @@ import type { AgentStep } from "langchain/schema";
 import { ChatMessageBubble } from "@/components/ChatMessageBubble";
 import { UploadDocumentsForm } from "@/components/UploadDocumentsForm";
 import { IntermediateStep } from "./IntermediateStep";
+import { URLUploadButton } from './URLUploadButton';
 
 export function ChatWindow(props: {
   endpoint: string,
@@ -27,7 +28,10 @@ export function ChatWindow(props: {
 
   const [showIntermediateSteps, setShowIntermediateSteps] = useState(false);
   const [intermediateStepsLoading, setIntermediateStepsLoading] = useState(false);
-  const ingestForm = showIngestForm && <UploadDocumentsForm></UploadDocumentsForm>;
+  const fileUpload = showIngestForm && <UploadDocumentsForm />;
+  const urlUpload = showIngestForm && <URLUploadButton />;
+
+  <UploadDocumentsForm />
   const intemediateStepsToggle = showIntermediateStepsToggle && (
     <div>
       <input type="checkbox" id="show_intermediate_steps" name="show_intermediate_steps" checked={showIntermediateSteps} onChange={(e) => setShowIntermediateSteps(e.target.checked)}></input>
@@ -107,7 +111,11 @@ export function ChatWindow(props: {
   }
 
   return (
+    
     <div className={`flex flex-col items-center p-4 md:p-8 rounded grow overflow-hidden ${(messages.length > 0 ? "border" : "")}`}>
+      {fileUpload}
+      {urlUpload}
+
       <h2 className={`${messages.length > 0 ? "" : "hidden"} text-2xl`}>{emoji} {titleText}</h2>
       {messages.length === 0 ? emptyStateComponent : ""}
       <div
@@ -125,8 +133,6 @@ export function ChatWindow(props: {
           ""
         )}
       </div>
-
-      {messages.length === 0 && ingestForm}
 
       <form onSubmit={sendMessage} className="flex w-full flex-col">
         <div className="flex">
