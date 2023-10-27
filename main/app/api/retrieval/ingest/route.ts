@@ -45,6 +45,7 @@ export async function POST(req: NextRequest) {
     });
 
     const splitDocuments = await splitter.createDocuments([text]);
+    console.log(splitDocuments)
 
     const vectorstore = await SupabaseVectorStore.fromDocuments(
       splitDocuments,
