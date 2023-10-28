@@ -18,7 +18,7 @@ export function UploadDocumentsForm() {
       formData.append('filename', file.name);
     }
 
-    const response = await fetch("/api/retrieval/file_ingest", {
+    const response = await fetch("http://localhost:8080/upload", {
       method: "POST",
       body: formData,
     });
@@ -36,7 +36,7 @@ export function UploadDocumentsForm() {
 
   return (
     <form onSubmit={ingest} className="flex w-full mb-4">
-      <input type="file" onChange={handleFileChange} className='grow mr-8 p-2 bg-sky-600 rounded'/>
+      <input type="file" onChange={handleFileChange} className='grow mr-8 p-2 bg-sky-600 rounded' name="pdfFile"/>
       <button type="submit" className="shrink-0 px-8 py-4 bg-sky-600 rounded w-28" disabled={isLoading}>
         <div role="status" className={`${isLoading ? "" : "hidden"} flex justify-center`}>
           <svg
