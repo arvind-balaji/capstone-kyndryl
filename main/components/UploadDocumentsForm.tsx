@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import axios from "axios";
 
 export function UploadDocumentsForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,32 +12,38 @@ export function UploadDocumentsForm() {
   const ingest = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('chunkSize',256)
+    axios.post('http://localhost:8080/uploads',formData )
+    .then( res => {})
+    .catch(er => console.log(er))
+    setFile(null);
 
-    const formData = new FormData();
-    if (file) {
-      formData.append("file", file);
-      formData.append('filename', file.name);
-    }
+    // if (file) {
+    //   formData.append("file", file);
+    //   formData.append('filename', file.name);
+    // }
 
-    const response = await fetch("http://localhost:8080/upload", {
-      method: "POST",
-      body: formData,
-    });
+    // const response = await fetch("http://localhost:8080/uploads", {
+    //   method: "POST",
+    //   body: formData,
+    // });
 
-    if (response.status === 200) {
-      setFile(null);
-    } else {
+    // if (response.status === 200) {
+    //   setFile(null);
+    // } else {
       
-      const json = await response.json();
-      if (json.error) { 
-      }
-    }
+    //   const json = await response.json();
+    //   if (json.error) { 
+    //   }
+    // }
     setIsLoading(false);
   };
 
   return (
-    <form onSubmit={ingest} className="flex w-full mb-4">
-      <input type="file" onChange={handleFileChange} className='grow mr-8 p-2 bg-sky-600 rounded' name="pdfFile"/>
+    <form onSubmit={ingest} encType="multipart/form-data" className="flex w-full mb-4" method="POST">
+      <input type="file" onChange={handleFileChange} className='grow mr-8 p-2 bg-sky-600 rounded' name="file"/>
       <button type="submit" className="shrink-0 px-8 py-4 bg-sky-600 rounded w-28" disabled={isLoading}>
         <div role="status" className={`${isLoading ? "" : "hidden"} flex justify-center`}>
           <svg

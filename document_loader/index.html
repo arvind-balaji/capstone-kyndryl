@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Uploaded File Information</title>
+</head>
+<body>
+    <h1>File Upload</h1>
+    <form action="/" method="POST" encType="multipart/form-data">
+      <input type="file" name="file" required>
+      <button type="submit">Upload</button>
+    </form>
+  <h1>Uploaded File Information</h1>
+  <div>
+    <p><strong>File Name:</strong> <span id="fileName"></span></p>
+    <p><strong>File Size:</strong> <span id="fileSize"></span></p>
+    <p><strong>File Type:</strong> <span id="fileType"></span></p>
+    <p><strong>Last Modified Date:</strong> <span id="lastModifiedDate"></span></p>
+  </div>
+  <script>
+    const fileData = JSON.parse('<%- JSON.stringify(fileData) %>');
+    document.getElementById('fileName').textContent = fileData.name;
+    document.getElementById('fileSize').textContent = fileData.size;
+    document.getElementById('fileType').textContent = fileData.type;
+    document.getElementById('lastModifiedDate').textContent = fileData.lastModifiedDate;
+  </script>
+</body>
+</html>
