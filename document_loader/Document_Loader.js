@@ -17,20 +17,26 @@ import { SupabaseVectorStore } from 'langchain/vectorstores/supabase'
 import dotenv from 'dotenv';
 import fs from 'fs';
 import express from 'express';
-import multer from 'multer';
+import upload from './upload.js';
 import cors from 'cors';
+import path from 'path';
 const app = express();
-const upload = multer({ dest: 'uploads/' });
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+console.log("Before multer")
 app.use(cors());
-app.post('/upload', upload.single('pdfFile'), (req, res) => {
+
+app.post('/uploads', upload.single('file'), (req, res) => {
     if (!req.file) {
         return res.status(400).send('No file uploaded.');
     }
-    console.log('Uploaded')
-    console.log(req.file)
-    document_loaders(256,req.file)
-
+    document_loaders(req)
     res.status(200).send('File uploaded successfully.');
+});
+
+app.get('/' , (req, res) => {
+  const filePath = path.resolve('index.html');
+  return res.sendFile(filePath);
 });
 
 const PORT = 8080;
@@ -38,30 +44,22 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
-export async function document_loaders(chunkSize_,file) {
+export async function document_loaders(req) {
   const result = dotenv.config({ path: '.env.local' });
 
   if (result.error) {
     throw result.error;
   }
-
-  const loader = new PDFLoader(file);
-
-  // const loader = new DirectoryLoader(
-  //   "src/",
-  //   {
-  //     ".json": (path) => new JSONLoader(path, "/texts"),
-  //     ".jsonl": (path) => new JSONLinesLoader(path, "/html"),
-  //     ".txt": (path) => new TextLoader(path),
-  //     ".csv": (path) => new CSVLoader(path, "text"),
-  //     // ".docx": (path) => new DocxLoader(path, "testdocx"),
-  //   }
-  // );
-  const docs = await loader.load();
-  console.log({ docs });
-  /* TO-DO:
-  Get chunkSize from the frontend client side
-  */
+  const { chunkSize } = req.body;
+  const chunkSize_ = +chunkSize
+  let docs;
+  try{
+    const loader = new PDFLoader(req.file.path);
+    docs = await loader.load();
+  } catch (e) {
+    console.error('An error occurred on file Loader:', error.message);
+  }
+  
   const textSplitter = new RecursiveCharacterTextSplitter({
   chunkSize: chunkSize_,
   chunkOverlap: 20,
@@ -70,7 +68,7 @@ export async function document_loaders(chunkSize_,file) {
   const splitDocs = await textSplitter.splitDocuments(docs);
   // TO-DO: replace FILE_NAME_FROM_FRONTEND once pipeline is supported
   for (let i = 0; i < splitDocs.length; i++) {
-  splitDocs[i].metadata.file_name = "FILE_NAME_FROM_FRONTEND";
+  splitDocs[i].metadata.filename = req.file.filename;
   splitDocs[i].metadata.type = "file_upload";
   }
 
@@ -90,5 +88,18 @@ export async function document_loaders(chunkSize_,file) {
   client,
   tableName: "documents",
   });
-  await store.addDocuments(splitDocs);
+  try {
+    await store.addDocuments(splitDocs);
+  } catch (err) {
+    console.error("Error inserting documents, Error:", err);
+  }
+  finally {
+    await fs.unlink(req.file.path, (err) => {
+      if (err) {
+        console.error(`Error deleting the file: ${err}`);
+      } else {
+        console.log(`The file ${req.file.path} has been deleted successfully.`);
+      }
+    });
+  }
 };
