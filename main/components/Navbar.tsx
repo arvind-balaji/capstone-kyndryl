@@ -14,7 +14,7 @@ export function Navbar() {
     try {
       const { data, error } = await client.from('documents').delete().neq("id", 0);
       if (error) throw error;
-      console.log('Documents deleted successfully', data);
+      alert("Reset knowledge base successfully!");
     } catch (error) {
       console.error('Error:', error);
     }
@@ -23,9 +23,9 @@ export function Navbar() {
   const pathname = usePathname();
   return (
     <nav className="mb-4">
-      <a className={`mr-4 ${pathname === "/" ? "text-white border-b" : ""}`} href="/">Test</a>
-      <a className={`mr-4 ${pathname === "/retrieval" ? "text-white border-b" : ""}`} href="/retrieval">Home</a>
-      <a className={`mr-4 ${pathname === "/" ? "text-white border-b" : ""}`} onClick={handleDelete}>Reset</a>
+      <a className={`mr-4 ${pathname === "/" ? "text-white border-b" : ""}`} href="/">About</a>
+      <a className={`mr-4 ${pathname === "/retrieval" ? "text-white border-b" : ""}`} href="/retrieval">App</a>
+      <a className={`mr-4`} onClick={handleDelete}>Reset</a>
     </nav>
   );
 }
