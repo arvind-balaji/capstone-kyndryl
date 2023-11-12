@@ -39,9 +39,14 @@ export async function POST(req: NextRequest) {
       process.env.SUPABASE_PRIVATE_KEY!,
     );
 
+    // const splitter = RecursiveCharacterTextSplitter.fromLanguage("markdown", {
+    //   chunkSize: 256,
+    //   chunkOverlap: 20,
+    // });
+
     const splitter = RecursiveCharacterTextSplitter.fromLanguage("markdown", {
-      chunkSize: 256,
-      chunkOverlap: 20,
+      chunkSize: Number(process.env.CHUNK_SIZE),
+      chunkOverlap: Number(process.env.CHUNK_OVERLAP),
     });
 
     const splitDocuments = await splitter.createDocuments([text]);

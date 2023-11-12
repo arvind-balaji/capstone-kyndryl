@@ -106,19 +106,6 @@ export function ChatWindow(props: {
     }
   }
 
-  const deleteDocuments = async () => {
-    const res = await fetch('/api/deleteDocuments', {
-      method: 'POST',
-    });
-    const data = await res.json();
-
-    if (res.status === 200) {
-      alert('Successfully deleted all rows from "documents" table.');
-    } else {
-      alert(`Error: ${data.error}`);
-    }
-  };
-
   return (
     <div className={`flex flex-col items-center p-4 md:p-8 rounded grow overflow-hidden ${(messages.length > 0 ? "border" : "")}`}>
       <h2 className={`${messages.length > 0 ? "" : "hidden"} text-2xl`}>{emoji} {titleText}</h2>
