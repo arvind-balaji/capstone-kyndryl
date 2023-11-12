@@ -83,8 +83,8 @@ export async function POST(req: NextRequest) {
     });
 
     const client = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_PRIVATE_KEY!,
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_PRIVATE_KEY!,
     );
     const vectorstore = new SupabaseVectorStore(new OpenAIEmbeddings(), {
       client,
