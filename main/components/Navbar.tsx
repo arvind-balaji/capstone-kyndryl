@@ -10,11 +10,13 @@ export function Navbar() {
   );
 
   const handleDelete = async (event: React.MouseEvent) => {
-    event.preventDefault(); 
+    event.preventDefault();
     try {
-      const { data, error } = await client.from('documents').delete().neq("id", 0);
-      if (error) throw error;
-      alert("Reset knowledge base successfully!");
+      if (confirm("Are you sure you want to reset your knowledge base?")) {
+        const { data, error } = await client.from('documents').delete().neq("id", 0);
+        if (error) throw error;
+        alert("Reset knowledge base successfully!");
+      }
     } catch (error) {
       console.error('Error:', error);
     }
