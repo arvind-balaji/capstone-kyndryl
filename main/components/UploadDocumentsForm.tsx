@@ -14,9 +14,12 @@ export function UploadDocumentsForm() {
     setIsLoading(true);
     const formData = new FormData()
     formData.append('file', file)
-    formData.append('chunkSize',256)
-    axios.post('http://localhost:8080/uploads',formData )
-    .then( res => {})
+    formData.append('chunkSize', 256)
+    axios.post('http://localhost:8080/uploads', formData)
+    .then( res => {
+      console.log(res);
+      setFile(null);
+    })
     .catch(er => console.log(er))
     setFile(null);
 
@@ -42,9 +45,9 @@ export function UploadDocumentsForm() {
   };
 
   return (
-    <form onSubmit={ingest} encType="multipart/form-data" className="flex w-full mb-4" method="POST">
-      <input type="file" onChange={handleFileChange} className='grow mr-8 p-2 bg-sky-600 rounded' name="file"/>
-      <button type="submit" className="shrink-0 px-8 py-4 bg-sky-600 rounded w-28" disabled={isLoading}>
+    <form onSubmit={ingest} encType="multipart/form-data" className="flex justify-center w-full mb-4" method="POST">
+      <input type="file" onChange={handleFileChange} className='grow mr-8 p-2 bg-white rounded' name="file"/>
+      <button type="submit" className="shrink-0 px-8 py-4 bg-[#fb442c] rounded w-28" disabled={isLoading}>
         <div role="status" className={`${isLoading ? "" : "hidden"} flex justify-center`}>
           <svg
             aria-hidden="true"
