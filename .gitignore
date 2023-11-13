@@ -4,6 +4,7 @@
 /main/node_modules
 /main/.pnp
 /main/.pnp.js
+/document_loader/node_modules
 
 # testing
 /main/coverage
@@ -26,6 +27,7 @@
 
 # local env files
 /main/.env*.local
+/document_loader/.env*.local
 
 # vercel
 /main/.vercel
