@@ -1,5 +1,5 @@
-
 export default function Home() {
+  
   return (
     <div className="p-4 md:p-8 rounded bg-[#25252d] w-full max-h-[85%] overflow-hidden">
       <h1 className="text-3xl md:text-4xl mb-4">
@@ -9,7 +9,7 @@ export default function Home() {
         <li className="text-l">
           🤝
           <span className="ml-2">
-          Here's your document assistant: Upload, receive quick answers with a whimsical touch 📁✨
+          Here&apos;s your document assistant: Upload, receive quick answers with a whimsical touch 📁✨
           </span>
         </li>
         <li className="text-l">
