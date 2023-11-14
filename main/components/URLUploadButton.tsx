@@ -1,13 +1,16 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+
 // import DEFAULT_RETRIEVAL_TEXT from "@/data/DefaultRetrievalText";
 
 const DEFAULT_URL_TEXT = "Insert URL";
 
 export function URLUploadButton() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [url, setDocument] = useState(DEFAULT_URL_TEXT);
+  const [url, setURL] = useState(DEFAULT_URL_TEXT);
 
   const ingest = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,22 +27,24 @@ export function URLUploadButton() {
     });
 
     if (response.status === 200) {
-      setDocument("Uploaded!");
+      alert("URL uploaded successfully");
+      setIsLoading(false);
+      router.push('/retrieval');
     } else {
       const json = await response.json();
       if (json.error) {
-        setDocument(json.error);
+        alert(json.error);
       }
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
   return (
     <form onSubmit={ingest} className="flex w-full mb-4">
     <textarea
-      className="grow mr-8 p-2 rounded bg-[#fbefeb"
+      className="grow mr-8 p-2 rounded"
       rows={1}
       value={url}
-      onChange={(e) => setDocument(e.target.value)}
+      onChange={(e) => setURL(e.target.value)}
     ></textarea>
     <button type="submit" className="shrink-0 px-8 py-4 bg-[#fb442c] rounded w-28" disabled={url == DEFAULT_URL_TEXT || !url}>
       <div role="status" className={`${isLoading ? "" : "hidden"} flex justify-center`}>
