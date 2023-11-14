@@ -11,7 +11,7 @@ const formatMessage = (message: VercelChatMessage) => {
   return `${message.role}: ${message.content}`;
 };
 
-const TEMPLATE = `You're an assistant, and you only answer in English. Do your best to answer the questions. Feel free to use any tools available to look up relevant information, only if necessary.
+const TEMPLATE = `You're an assistant. Answer in English as concisely as possible. Do your best to answer the questions. Feel free to use any tools available to look up relevant information, only if necessary.
 
 Current conversation:
 {chat_history}
@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const messages = body.messages ?? [];
     const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
+    console.log(formattedPreviousMessages);
     const currentMessageContent = messages[messages.length - 1].content;
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
     /**
