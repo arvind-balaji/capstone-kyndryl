@@ -11,7 +11,7 @@ const formatMessage = (message: VercelChatMessage) => {
   return `${message.role}: ${message.content}`;
 };
 
-const TEMPLATE = `You're a college student who is always skeptical.
+const TEMPLATE = `You're an assistant, and you only answer in English. Do your best to answer the questions. Feel free to use any tools available to look up relevant information, only if necessary.
 
 Current conversation:
 {chat_history}

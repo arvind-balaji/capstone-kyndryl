@@ -2,8 +2,10 @@
 
 import { usePathname } from 'next/navigation';
 import { createClient } from "@supabase/supabase-js";
+import { useRouter } from 'next/navigation';
 
 export function Navbar() {
+  const router = useRouter();
   const client = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PRIVATE_KEY!,
@@ -16,6 +18,7 @@ export function Navbar() {
         const { data, error } = await client.from('documents').delete().neq("id", 0);
         if (error) throw error;
         alert("Reset knowledge base successfully!");
+        router.push("/");
       }
     } catch (error) {
       console.error('Error:', error);
