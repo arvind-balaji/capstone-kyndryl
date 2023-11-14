@@ -30,7 +30,7 @@ app.post('/uploads', upload.single('file'), (req, res) => {
     if (!req.file) {
         return res.status(400).send('No file uploaded.');
     }
-    document_loaders(req)
+    document_loaders(req.body,req.file)
     res.status(200).send('File uploaded successfully.');
 });
 
@@ -44,17 +44,18 @@ app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
-export async function document_loaders(req) {
+export async function document_loaders(chunkS, file) {
   const result = dotenv.config({ path: '.env.local' });
 
   if (result.error) {
     throw result.error;
   }
-  const { chunkSize } = req.body;
-  const chunkSize_ = +chunkSize
+  const { chunkSize } = chunkS;
+  const chunkSize_ = +chunkSize;
   let docs;
+  console.log(file);
   try{
-    const loader = new PDFLoader(req.file.path);
+    const loader = new PDFLoader(file.path);
     docs = await loader.load();
   } catch (e) {
     console.error('An error occurred on file Loader:', error.message);
@@ -68,7 +69,7 @@ export async function document_loaders(req) {
   const splitDocs = await textSplitter.splitDocuments(docs);
   // TO-DO: replace FILE_NAME_FROM_FRONTEND once pipeline is supported
   for (let i = 0; i < splitDocs.length; i++) {
-  splitDocs[i].metadata.filename = req.file.filename;
+  splitDocs[i].metadata.filename = file.filename;
   splitDocs[i].metadata.type = "file_upload";
   }
 
@@ -94,11 +95,11 @@ export async function document_loaders(req) {
     console.error("Error inserting documents, Error:", err);
   }
   finally {
-    await fs.unlink(req.file.path, (err) => {
+    await fs.unlink(file.path, (err) => {
       if (err) {
         console.error(`Error deleting the file: ${err}`);
       } else {
-        console.log(`The file ${req.file.path} has been deleted successfully.`);
+        console.log(`The file ${file.path} has been deleted successfully.`);
       }
     });
   }

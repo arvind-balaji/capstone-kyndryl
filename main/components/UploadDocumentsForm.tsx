@@ -16,14 +16,11 @@ export function UploadDocumentsForm() {
     formData.append('file', file)
     formData.append('chunkSize',256)
     axios.post('http://localhost:8080/uploads',formData )
-    .then( res => {})
+    .then( res => {console.log(res)})
+    .then( setIsLoading(false) )
     .catch(er => console.log(er))
     setFile(null);
-
-    // if (file) {
-    //   formData.append("file", file);
-    //   formData.append('filename', file.name);
-    // }
+    window.location.reload();
 
     // const response = await fetch("http://localhost:8080/uploads", {
     //   method: "POST",
@@ -38,7 +35,7 @@ export function UploadDocumentsForm() {
     //   if (json.error) { 
     //   }
     // }
-    setIsLoading(false);
+    
   };
 
   return (
