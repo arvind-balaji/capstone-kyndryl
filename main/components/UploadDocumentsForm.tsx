@@ -15,7 +15,7 @@ export function UploadDocumentsForm() {
     const formData = new FormData()
     formData.append('file', file)
     formData.append('chunkSize', 256)
-    axios.post('http://localhost:8080/uploads', formData)
+    axios.post('/api/retrieval/file_ingest', formData)
     .then( res => {
       console.log(res);
       setFile(null);
