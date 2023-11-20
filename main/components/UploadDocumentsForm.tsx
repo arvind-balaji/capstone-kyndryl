@@ -15,13 +15,13 @@ export function UploadDocumentsForm() {
     e.preventDefault();
     setIsLoading(true);
     const formData = new FormData()
-    formData.append('file', file)
-    formData.append('chunkSize', 256)
+    formData.append('file', file);
+    formData.append('chunkSize', String(process.env.NEXT_PUBLIC_CHUNK_SIZE));
     axios.post('/api/retrieval/file_ingest', formData)
     .then( res => {
       console.log(res);
-      alert("Document uploaded successfully")
-      router.push("/retrieval")
+      alert("Document uploaded successfully");
+      router.push("/retrieval");
       setFile(null);
       setIsLoading(false);
     })
