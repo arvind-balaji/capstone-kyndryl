@@ -11,6 +11,9 @@ dependencies:
   '@supabase/supabase-js':
     specifier: ^2.32.0
     version: 2.38.1
+  '@types/formidable':
+    specifier: ^3.4.5
+    version: 3.4.5
   '@types/node':
     specifier: 20.4.5
     version: 20.4.5
@@ -49,7 +52,7 @@ dependencies:
     version: 9.0.5
   langchain:
     specifier: ^0.0.159
-    version: 0.0.159(@supabase/supabase-js@2.38.1)(axios@1.6.0)(cheerio@1.0.0-rc.12)(epub2@3.0.2)(html-to-text@9.0.5)(mammoth@1.6.0)(pdf-parse@1.1.1)(srt-parser-2@1.2.3)
+    version: 0.0.159(@supabase/supabase-js@2.38.1)(axios@1.6.0)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(epub2@3.0.2)(html-to-text@9.0.5)(mammoth@1.6.0)(pdf-parse@1.1.1)(srt-parser-2@1.2.3)
   mammoth:
     specifier: ^1.6.0
     version: 1.6.0
@@ -88,6 +91,9 @@ dependencies:
     version: 3.21.4(zod@3.22.4)
 
 devDependencies:
+  encoding:
+    specifier: ^0.1.13
+    version: 0.1.13
   prettier:
     specifier: 3.0.0
     version: 3.0.0
@@ -112,7 +118,7 @@ packages:
       '@jridgewell/trace-mapping': 0.3.19
     dev: false
 
-  /@anthropic-ai/sdk@0.6.2:
+  /@anthropic-ai/sdk@0.6.2(encoding@0.1.13):
     resolution: {integrity: sha512-fB9PUj9RFT+XjkL+E9Ol864ZIJi+1P8WnbHspN3N3/GK2uSzjd0cbVIKTGgf4v3N8MwaQu+UWnU7C4BG/fap/g==}
     dependencies:
       '@types/node': 18.18.5
@@ -122,7 +128,7 @@ packages:
       digest-fetch: 1.3.0
       form-data-encoder: 1.7.2
       formdata-node: 4.4.1
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -447,6 +453,12 @@ packages:
 
   /@types/estree@1.0.2:
     resolution: {integrity: sha512-VeiPZ9MMwXjO32/Xu7+OwflfmeoRwkE/qzndw42gGtgJwZopBnzy2gD//NN1+go1mADzkDcqf/KnFRSjTJ8xJA==}
+    dev: false
+
+  /@types/formidable@3.4.5:
+    resolution: {integrity: sha512-s7YPsNVfnsng5L8sKnG/Gbb2tiwwJTY1conOkJzTMRvJAlLFW1nEua+ADsJQu8N1c0oTHx9+d5nqg10WuT9gHQ==}
+    dependencies:
+      '@types/node': 20.4.5
     dev: false
 
   /@types/json5@0.0.29:
@@ -1379,6 +1391,11 @@ packages:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
     dev: false
 
+  /encoding@0.1.13:
+    resolution: {integrity: sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==}
+    dependencies:
+      iconv-lite: 0.6.3
+
   /enhanced-resolve@5.15.0:
     resolution: {integrity: sha512-LXYT42KJ7lpIKECr2mAXIaMldcNCh/7E0KBKOu4KSfkHmP+mZmSs+8V5gBAqisWBy0OO4W5Oyys0GO1Y8KtdKg==}
     engines: {node: '>=10.13.0'}
@@ -2173,6 +2190,12 @@ packages:
       ms: 2.1.3
     dev: false
 
+  /iconv-lite@0.6.3:
+    resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      safer-buffer: 2.1.2
+
   /ignore@5.2.4:
     resolution: {integrity: sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==}
     engines: {node: '>= 4'}
@@ -2487,7 +2510,7 @@ packages:
       json-buffer: 3.0.1
     dev: false
 
-  /langchain@0.0.159(@supabase/supabase-js@2.38.1)(axios@1.6.0)(cheerio@1.0.0-rc.12)(epub2@3.0.2)(html-to-text@9.0.5)(mammoth@1.6.0)(pdf-parse@1.1.1)(srt-parser-2@1.2.3):
+  /langchain@0.0.159(@supabase/supabase-js@2.38.1)(axios@1.6.0)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(epub2@3.0.2)(html-to-text@9.0.5)(mammoth@1.6.0)(pdf-parse@1.1.1)(srt-parser-2@1.2.3):
     resolution: {integrity: sha512-+etcFu4QiFkYsGPMtWv3ggBU4LSQxVi/0h648Z7RippqaOuqlIm1lV+U+HCaJOLuMVF4ddEyXnxRVFug4JMkMg==}
     engines: {node: '>=18'}
     peerDependencies:
@@ -2745,7 +2768,7 @@ packages:
       youtubei.js:
         optional: true
     dependencies:
-      '@anthropic-ai/sdk': 0.6.2
+      '@anthropic-ai/sdk': 0.6.2(encoding@0.1.13)
       '@supabase/supabase-js': 2.38.1
       ansi-styles: 5.2.0
       axios: 1.6.0
@@ -2765,7 +2788,7 @@ packages:
       mammoth: 1.6.0
       ml-distance: 4.0.1
       object-hash: 3.0.0
-      openai: 4.4.0
+      openai: 4.4.0(encoding@0.1.13)
       openapi-types: 12.1.3
       p-queue: 6.6.2
       p-retry: 4.6.2
@@ -3065,7 +3088,7 @@ packages:
     resolution: {integrity: sha512-DRI60hzo2oKN1ma0ckc6nQWlHU69RH6xN0sjQTjMpChPfTYvKZdcQFfdYK2RWbJcKyUizSIy/l8OTGxMAM1QDw==}
     dev: false
 
-  /node-fetch@2.7.0:
+  /node-fetch@2.7.0(encoding@0.1.13):
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
     engines: {node: 4.x || >=6.0.0}
     peerDependencies:
@@ -3074,6 +3097,7 @@ packages:
       encoding:
         optional: true
     dependencies:
+      encoding: 0.1.13
       whatwg-url: 5.0.0
     dev: false
 
@@ -3185,7 +3209,7 @@ packages:
       wrappy: 1.0.2
     dev: false
 
-  /openai@4.4.0:
+  /openai@4.4.0(encoding@0.1.13):
     resolution: {integrity: sha512-JN0t628Kh95T0IrXl0HdBqnlJg+4Vq0Bnh55tio+dfCnyzHvMLiWyCM9m726MAJD2YkDU4/8RQB6rNbEq9ct2w==}
     hasBin: true
     dependencies:
@@ -3196,7 +3220,7 @@ packages:
       digest-fetch: 1.3.0
       form-data-encoder: 1.7.2
       formdata-node: 4.4.1
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -3636,6 +3660,9 @@ packages:
   /sax@1.3.0:
     resolution: {integrity: sha512-0s+oAmw9zLl1V1cS9BtZN7JAd0cW5e0QH4W3LWEK6a4LaLEA2OTpGYWDY+6XasBLtz6wkm3u1xRw95mRuJ59WA==}
     dev: false
+    
+  /safer-buffer@2.1.2:
+    resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
   /scheduler@0.23.0:
     resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
