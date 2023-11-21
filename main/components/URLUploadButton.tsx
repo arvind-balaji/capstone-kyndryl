@@ -21,7 +21,7 @@ export function URLUploadButton() {
       formData.append("url", url);
     }
 
-    const response = await fetch("/api/retrieval/file_ingest", {
+    const response = await fetch("/api/retrieval/url_ingest", {
       method: "POST",
       body: formData
     });
@@ -39,7 +39,7 @@ export function URLUploadButton() {
     }
   };
   return (
-    <form onSubmit={ingest} className="flex w-full mb-4">
+    <form onSubmit={ingest} className="flex w-full mb-4" encType="multipart/form-data" method="POST">
     <textarea
       className="grow mr-8 p-2 rounded"
       rows={1}

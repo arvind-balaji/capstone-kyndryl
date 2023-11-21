@@ -8,6 +8,9 @@ import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { IncomingForm } from 'formidable'
 import { promises as fs } from 'fs'
 import { TextLoader } from "langchain/document_loaders/fs/text";
+import { DocxLoader } from "langchain/document_loaders/fs/docx";
+import { JSONLoader } from "langchain/document_loaders/fs/json";
+import { SRTLoader } from "langchain/document_loaders/fs/srt";
 // import {writeFile} from 'fs'
 
 export const runtime = "nodejs";
@@ -44,6 +47,12 @@ export async function POST(req: NextRequest) {
           return new PDFLoader(blob);
         else if (file.type === 'text/plain')
           return new TextLoader(blob)
+        else if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+          return new DocxLoader(blob)
+        else if (file.type === 'application/json')
+          return new JSONLoader(blob)
+        else if (file.type === 'application/x-subrip')
+          return new SRTLoader(blob)
       })();
       if (!loader)
         return NextResponse.json({ error: 'Unsupported file type' }, { status: 400 });
@@ -76,7 +85,7 @@ export async function POST(req: NextRequest) {
         },
       );
 
-      console.log(docs)
+      // console.log(docs)
     }
 
 
