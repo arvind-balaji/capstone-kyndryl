@@ -38,10 +38,13 @@ export async function POST(req: NextRequest) {
 
   try {
     const formData = await req.formData();
+    console.log(formData)
 
     const file: File | null = formData.get('file') as unknown as File
+    console.log(file)
     if (file) {
       const blob = new Blob([await file.arrayBuffer()], { type: file.type })
+      console.log(blob)
       const loader = (() => {
         if (file.type === 'application/pdf')
           return new PDFLoader(blob);
@@ -63,7 +66,10 @@ export async function POST(req: NextRequest) {
         chunkOverlap: 20,
       });
 
-      const splitDocs = await textSplitter.splitDocuments(docs);
+      const splitDocs = (await textSplitter.splitDocuments(docs)).map((doc: any) => ({...doc, metadata: {
+        ...doc.metadata,
+        filename: file.name
+      }}))
 
       const embeddings = new OpenAIEmbeddings({
         openAIApiKey: process.env.OPENAI_API_KEY,
