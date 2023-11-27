@@ -8,8 +8,8 @@ export default function AccountForm({ session }: { session: Session | null }) {
   const [loading, setLoading] = useState(true)
   const [fullname, setFullname] = useState<string | null>(null)
   const [username, setUsername] = useState<string | null>(null)
-//   const [website, setWebsite] = useState<string | null>(null)
-//   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
+  const [website, setWebsite] = useState<string | null>(null)
+  const [avatar_url, setAvatarUrl] = useState<string | null>(null)
   const user = session?.user
 
   const getProfile = useCallback(async () => {
@@ -18,7 +18,7 @@ export default function AccountForm({ session }: { session: Session | null }) {
 
       const { data, error, status } = await supabase
         .from('profiles')
-        .select(`full_name, username`)
+        .select(`full_name, username, website, avatar_url`)
         .eq('id', user?.id)
         .single()
 
@@ -29,6 +29,8 @@ export default function AccountForm({ session }: { session: Session | null }) {
       if (data) {
         setFullname(data.full_name)
         setUsername(data.username)
+        setWebsite(data.website)
+        setAvatarUrl(data.avatar_url)
       }
     } catch (error) {
       alert('Error loading user data!')
@@ -43,9 +45,13 @@ export default function AccountForm({ session }: { session: Session | null }) {
 
   async function updateProfile({
     username,
+    website,
+    avatar_url,
   }: {
     username: string | null
     fullname: string | null
+    website: string | null
+    avatar_url: string | null
   }) {
     try {
       setLoading(true)
@@ -54,6 +60,8 @@ export default function AccountForm({ session }: { session: Session | null }) {
         id: user?.id as string,
         full_name: fullname,
         username,
+        website,
+        avatar_url,
         updated_at: new Date().toISOString(),
       })
       if (error) throw error
@@ -89,11 +97,20 @@ export default function AccountForm({ session }: { session: Session | null }) {
           onChange={(e) => setUsername(e.target.value)}
         />
       </div>
+      <div>
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          type="url"
+          value={website || ''}
+          onChange={(e) => setWebsite(e.target.value)}
+        />
+      </div>
 
       <div>
         <button
           className="button primary block"
-          onClick={() => updateProfile({ fullname, username })}
+          onClick={() => updateProfile({ fullname, username, website, avatar_url })}
           disabled={loading}
         >
           {loading ? 'Loading ...' : 'Update'}
