@@ -1,3 +1,5 @@
+import AuthForm from './auth-form'
+
 export default function Home() {
   
   return (
@@ -43,6 +45,9 @@ export default function Home() {
           </span>
         </li>
       </ul>
+      <div className="col-6 auth-widget">
+        <AuthForm />
+      </div>
     </div>
   );
 }
