@@ -13,24 +13,49 @@ export function UploadDocumentsForm() {
     setFile(e.target.files[0]);
   };
 
-  const convertXlsx = (file) => {
+  const convertXlsx = (file: any) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
   
       reader.onload = (e) => {
-        const data = e.target.result;
-        const workbook = XLSX.read(data, { type: 'binary' });
+        try {
+          const data = e.target.result;
+          const workbook = XLSX.read(data, { type: 'binary' });
   
-        let allCsvData = '';
-
-      workbook.SheetNames.forEach((sheetName, index) => {
-        if (index > 0) {
-          // Add a newline between sheets
-          allCsvData += '\n';
+          let allCsvData = '';
+  
+          const promises = workbook.SheetNames.map(async (sheetName, index) => {
+            if (index > 0) {
+              // Add a newline between sheets
+              allCsvData += '\n';
+            }
+  
+            const formData = new FormData();
+            const csv = XLSX.utils.sheet_to_csv(workbook.Sheets[sheetName]);
+            await formData.append('file', new Blob([csv], { type: 'text/csv' }), file.name + '_converted.csv');
+  
+            await axios.post('/api/retrieval/file_ingest', formData)
+              .then(res => {
+                console.log(res);
+              })
+              .catch(er => {
+                console.log(er);
+              });
+  
+            allCsvData += csv;
+          });
+  
+          Promise.all(promises)
+            .then(() => {
+              resolve(allCsvData);
+            })
+            .catch((error) => {
+              reject(error);
+            });
+        } catch (error) {
+          reject(error);
         }
-
-        allCsvData += XLSX.utils.sheet_to_csv(workbook.Sheets[sheetName]);
-      });
+      };
   
       reader.onerror = (error) => {
         reject(error);
@@ -39,36 +64,42 @@ export function UploadDocumentsForm() {
       reader.readAsBinaryString(file);
     });
   };
-
   const ingest = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    const formData = new FormData()
+    
     const fileExtension = path.extname(file.name);
     if (fileExtension === '.xlsx' || fileExtension === '.xls') {
-      const csvData = await convertXlsx(file);
-      console.log("Converted to csv")
-      formData.append('file', new Blob([csvData], { type: 'text/csv' }), file.name+'_converted.csv');
+      try {
+        const csvData = await convertXlsx(file);
+        await alert('Document uploaded successfully');
+        router.push('/retrieval');
+        setFile(null);
+      } catch (error) {
+        console.log('Error converting to csv:', error);
+      } finally {
+        setIsLoading(false);
+      }
     } else {
+      const formData = new FormData()
       formData.append('file', file);
-    }
     // formData.append('chunkSize', String(process.env.NEXT_PUBLIC_CHUNK_SIZE));
-    console.log(formData.toString());
-    axios.post('/api/retrieval/file_ingest', formData)
-    .then( res => {
-      console.log(res);
-      alert("Document uploaded successfully");
-      router.push("/retrieval");
-      setFile(null);
-      setIsLoading(false);
-    })
-    .catch(er => {
-      console.log(er);
-      setFile(null);
-      setIsLoading(false);
-    });
+      axios.post('/api/retrieval/file_ingest', formData)
+      .then( res => {
+        console.log(res);
+        alert("Document uploaded successfully");
+        router.push("/retrieval");
+        setFile(null);
+        setIsLoading(false);
+      })
+      .catch(er => {
+        console.log(er);
+        setFile(null);
+        setIsLoading(false);
+      });
+    }
   };
-
+  
   return (
     <form onSubmit={ingest} encType="multipart/form-data" className="flex justify-center w-full mb-4" method="POST">
       <input type="file" onChange={handleFileChange} className='grow mr-8 p-2 bg-white rounded' name="file"/>
