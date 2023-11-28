@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from 'next/navigation';
 import axios from "axios";
+import * as XLSX from 'xlsx';
+const path = require('path');
 
 export function UploadDocumentsForm() {
   const router = useRouter();
@@ -11,12 +13,47 @@ export function UploadDocumentsForm() {
     setFile(e.target.files[0]);
   };
 
+  const convertXlsx = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onload = (e) => {
+        const data = e.target.result;
+        const workbook = XLSX.read(data, { type: 'binary' });
+  
+        let allCsvData = '';
+
+      workbook.SheetNames.forEach((sheetName, index) => {
+        if (index > 0) {
+          // Add a newline between sheets
+          allCsvData += '\n';
+        }
+
+        allCsvData += XLSX.utils.sheet_to_csv(workbook.Sheets[sheetName]);
+      });
+  
+      reader.onerror = (error) => {
+        reject(error);
+      };
+  
+      reader.readAsBinaryString(file);
+    });
+  };
+
   const ingest = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     const formData = new FormData()
-    formData.append('file', file);
-    formData.append('chunkSize', String(process.env.NEXT_PUBLIC_CHUNK_SIZE));
+    const fileExtension = path.extname(file.name);
+    if (fileExtension === '.xlsx' || fileExtension === '.xls') {
+      const csvData = await convertXlsx(file);
+      console.log("Converted to csv")
+      formData.append('file', new Blob([csvData], { type: 'text/csv' }), file.name+'_converted.csv');
+    } else {
+      formData.append('file', file);
+    }
+    // formData.append('chunkSize', String(process.env.NEXT_PUBLIC_CHUNK_SIZE));
+    console.log(formData.toString());
     axios.post('/api/retrieval/file_ingest', formData)
     .then( res => {
       console.log(res);

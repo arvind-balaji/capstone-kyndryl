@@ -11,6 +11,7 @@ import { TextLoader } from "langchain/document_loaders/fs/text";
 import { DocxLoader } from "langchain/document_loaders/fs/docx";
 import { JSONLoader } from "langchain/document_loaders/fs/json";
 import { SRTLoader } from "langchain/document_loaders/fs/srt";
+import { CSVLoader } from "langchain/document_loaders/fs/csv";
 // import {writeFile} from 'fs'
 
 export const runtime = "nodejs";
@@ -56,6 +57,8 @@ export async function POST(req: NextRequest) {
           return new JSONLoader(blob)
         else if (file.type === 'application/x-subrip')
           return new SRTLoader(blob)
+        else if (file.type === 'text/csv')
+          return new CSVLoader(blob)
       })();
       if (!loader)
         return NextResponse.json({ error: 'Unsupported file type' }, { status: 400 });
