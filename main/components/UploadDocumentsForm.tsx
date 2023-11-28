@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from 'next/navigation';
 import axios from "axios";
-import * as XLSX from 'xlsx';
+import { read, utils } from 'xlsx';
 const path = require('path');
 
 export function UploadDocumentsForm() {
@@ -20,7 +20,7 @@ export function UploadDocumentsForm() {
       reader.onload = (e) => {
         try {
           const data = e.target.result;
-          const workbook = XLSX.read(data, { type: 'binary' });
+          const workbook = read(data, { type: 'binary' });
   
           let allCsvData = '';
   
@@ -31,7 +31,7 @@ export function UploadDocumentsForm() {
             }
   
             const formData = new FormData();
-            const csv = XLSX.utils.sheet_to_csv(workbook.Sheets[sheetName]);
+            const csv = utils.sheet_to_csv(workbook.Sheets[sheetName]);
             await formData.append('file', new Blob([csv], { type: 'text/csv' }), file.name + '_converted.csv');
   
             await axios.post('/api/retrieval/file_ingest', formData)
@@ -73,7 +73,7 @@ export function UploadDocumentsForm() {
       try {
         const csvData = await convertXlsx(file);
         await alert('Document uploaded successfully');
-        router.push('/retrieval');
+        await router.push('/retrieval');
         setFile(null);
       } catch (error) {
         console.log('Error converting to csv:', error);
