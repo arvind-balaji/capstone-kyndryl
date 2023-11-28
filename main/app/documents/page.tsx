@@ -8,7 +8,7 @@ import { GetServerSideProps } from "next";
 import { createClient } from "@supabase/supabase-js";
 
 
-export const getFiles = cache(async () => {
+const getFiles = cache(async () => {
   const client = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PRIVATE_KEY!,
