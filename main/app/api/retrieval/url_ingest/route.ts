@@ -31,13 +31,13 @@ export async function POST(req: NextRequest) {
         });
   
         const splitDocs = (await textSplitter.splitDocuments(docs))
-          .map((doc: { metadata: any; }) => ({
-            ...doc,
-            metadata: {
-              ...doc.metadata,
-              filename: url
-            }
-          }))
+        .map((doc: { pageContent: string; metadata: any; }) => ({
+          pageContent: doc.pageContent, // Replace 'someTextProperty' with the actual property name containing the text
+          metadata: {
+            ...doc.metadata,
+            filename: url
+          }
+        }));
   
         const embeddings = new OpenAIEmbeddings({
           openAIApiKey: process.env.OPENAI_API_KEY,

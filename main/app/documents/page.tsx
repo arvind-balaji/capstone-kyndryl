@@ -38,7 +38,7 @@ export default function AgentsPage() {
     .select("filename")
     .neq("filename", null)
     .then(({data}) => setFiles(data as []))
-  }, [])
+  })
 
 
   const deleteByFilename = (filename: string) => {
