@@ -8,19 +8,19 @@ import { GetServerSideProps } from "next";
 import { createClient } from "@supabase/supabase-js";
 
 
-export const getFiles = cache(async () => {
-  const client = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PRIVATE_KEY!,
-  );
-  const {data} = await client
-  .from("documents")
-  .select()
+// export const getFiles = cache(async () => {
+//   const client = createClient(
+//     process.env.NEXT_PUBLIC_SUPABASE_URL!,
+//     process.env.NEXT_PUBLIC_SUPABASE_PRIVATE_KEY!,
+//   );
+//   const {data} = await client
+//   .from("documents")
+//   .select()
 
-  console.log(data)
+//   console.log(data)
 
-  return data
-})
+//   return data
+// })
  
 export default function AgentsPage() {
   const [showFile, setShowFile] = useState(false);
@@ -55,9 +55,10 @@ export default function AgentsPage() {
     </div>
   );
 
-  // useEffect(() => {getFiles().then(data => console.log(data)).catch(err => console.log(err))}, [])
-  console.log(files)
-  console.log(files.reduce((acc, val) => ({...acc, [val.id]: (acc[val.id]??0) + 1}), {}))
+  console.log(files);
+  console.log(
+    files.reduce((acc: Record<string, number>, val: any) => ({ ...acc, [val.id]: (acc[val.id] ?? 0) + 1 }), {})
+  );
   return (
     <div className="flex flex-col gap-4">
       {InfoCard}
@@ -107,14 +108,16 @@ export default function AgentsPage() {
     </tr>
   </thead>
   <tbody>
-    {files.map(f => (<tr key={f.filename}className="m-4">
-      <td>{f.filename}</td>
-      <td className="px-2">
-        <button className={`shrink-0 p-1 bg-[#fb442c] rounded `} onClick={() => deleteByFilename(f.filename)}>
-          Delete
-        </button>
-      </td>
-    </tr>))}
+    {files.map((f: { filename: string }) => (
+      <tr key={f.filename} className="m-4">
+        <td>{f.filename}</td>
+        <td className="px-2">
+          <button className={`shrink-0 p-1 bg-[#fb442c] rounded `} onClick={() => deleteByFilename(f.filename)}>
+            Delete
+          </button>
+        </td>
+      </tr>
+    ))}
   </tbody>
 </table>
       </div>
