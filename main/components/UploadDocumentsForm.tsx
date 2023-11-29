@@ -13,6 +13,11 @@ export function UploadDocumentsForm() {
     setFile(e.target.files[0]);
   };
 
+  function getFileName(filePath) {
+    const parsedPath = path.parse(filePath);
+    return parsedPath.name;
+  }
+
   const convertXlsx = (file: any) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -32,7 +37,7 @@ export function UploadDocumentsForm() {
   
             const formData = new FormData();
             const csv = utils.sheet_to_csv(workbook.Sheets[sheetName]);
-            await formData.append('file', new Blob([csv], { type: 'text/csv' }), file.name + '_converted.csv');
+            await formData.append('file', new Blob([csv], { type: 'text/csv' }), getFileName(file.name) + '_converted.csv');
   
             await axios.post('/api/retrieval/file_ingest', formData)
               .then(res => {
