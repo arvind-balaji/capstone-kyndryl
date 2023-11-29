@@ -4,8 +4,6 @@ import { HtmlToTextTransformer } from "langchain/document_transformers/html_to_t
 import { createClient } from "@supabase/supabase-js";
 import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { IncomingForm } from 'formidable'
-import { promises as fs } from 'fs'
 import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
 
 export const runtime = "nodejs";
@@ -16,7 +14,7 @@ export async function POST(req: NextRequest) {
   
       const url: URL | null = formData.get('url') as unknown as URL
       if (url) {
-        const loader = new CheerioWebBaseLoader(url);
+        const loader = new CheerioWebBaseLoader(url.toString());
         if (!loader)
           return NextResponse.json({ error: 'Unsupported URL' }, { status: 400 });
         const docs_ = await loader.load();
@@ -33,7 +31,7 @@ export async function POST(req: NextRequest) {
         });
   
         const splitDocs = (await textSplitter.splitDocuments(docs))
-          .map((doc) => ({
+          .map((doc: { metadata: any; }) => ({
             ...doc,
             metadata: {
               ...doc.metadata,

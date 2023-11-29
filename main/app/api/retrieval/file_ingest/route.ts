@@ -5,8 +5,6 @@ import { createClient } from "@supabase/supabase-js";
 import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { IncomingForm } from 'formidable'
-import { promises as fs } from 'fs'
 import { TextLoader } from "langchain/document_loaders/fs/text";
 import { DocxLoader } from "langchain/document_loaders/fs/docx";
 import { JSONLoader } from "langchain/document_loaders/fs/json";
