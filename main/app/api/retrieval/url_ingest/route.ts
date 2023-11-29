@@ -11,10 +11,6 @@ import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
-    // const body = await req.json();
-    // const text = body.text;
-  
-  
     try {
       const formData = await req.formData();
   
@@ -30,13 +26,20 @@ export async function POST(req: NextRequest) {
         const sequence = splitter.pipe(transformer);
 
         const docs = await sequence.invoke(docs_);
-        // console.log(docs);
+
         const textSplitter = new RecursiveCharacterTextSplitter({
           chunkSize: 512,
           chunkOverlap: 20,
         });
   
-        const splitDocs = await textSplitter.splitDocuments(docs);
+        const splitDocs = (await textSplitter.splitDocuments(docs))
+          .map((doc) => ({
+            ...doc,
+            metadata: {
+              ...doc.metadata,
+              filename: url
+            }
+          }))
   
         const embeddings = new OpenAIEmbeddings({
           openAIApiKey: process.env.OPENAI_API_KEY,
@@ -58,11 +61,8 @@ export async function POST(req: NextRequest) {
           },
         );
   
-        // console.log(docs)
       }
   
-  
-      // await writeFile("~/Documents/foo.pdf", Buffer.from(await file.arrayBuffer()));
       return NextResponse.json({ ok: true }, { status: 200 });
     } catch (e: any) {
       console.error(e);
