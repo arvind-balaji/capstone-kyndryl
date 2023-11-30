@@ -58,14 +58,14 @@ export function Navbar() {
   return (
     <nav className="mb-4 flex">
       <button
-        className={`mr-4 ${pathname === "/" ? "text-white border-b" : "text-red"}`}
+        className={`mr-4 ${pathname === "/" ? "text-white border-b" : "text-red-500  hover:text-white"}`}
         onClick={() => router.push("/")}
       >
         About
       </button>
       <button
         className={`mr-4 ${
-          pathname === "/retrieval" ? "text-white border-b" : ""
+          pathname === "/retrieval" ? "text-white border-b" : "text-red-500 hover:text-white"
         }`}
         onClick={() => router.push("/retrieval")}
       >
@@ -74,7 +74,11 @@ export function Navbar() {
       {/* <a className={`mr-4 ${pathname === "/structured_output" ? "text-white border-b" : ""}`} href="/structured_output">🧱 Structured Output</a>
       <a className={`mr-4 ${pathname === "/agents" ? "text-white border-b" : ""}`} href="/agents">🦜 Agents</a> */}
       <button
-        className={`mr-4 ${pathname === '/documents' ? 'text-white border-b' : ''}`}
+        className={`mr-4 ${
+          pathname === '/documents'
+            ? `text-white border-b`
+            : `text-red-500 hover:text-white ${isAdmin ? 'hover:text-red-500 hover:border-b' : 'cursor-not-allowed'}`
+        }`}
         onClick={() => {
           if (isAdmin) {
             // Handle the click event for admins
@@ -93,7 +97,7 @@ export function Navbar() {
         <button className="shrink-0 py-1 bg-red-500 rounded w-16 mr-4" onClick={handleDelete}>
         Reset
       </button>
-      <div className="mr-4 flex">
+      <div className="ml-auto flex">
         <p className="mr-2">Admin Status</p>
         <label className="switch mr-4">
           <input type="checkbox" checked={isAdmin} onChange={handleToggle} />
