@@ -55,10 +55,10 @@ export default function AgentsPage() {
     </div>
   );
 
-  console.log(files);
-  console.log(
-    files.reduce((acc: Record<string, number>, val: any) => ({ ...acc, [val.id]: (acc[val.id] ?? 0) + 1 }), {})
-  );
+  // console.log(files);
+  // console.log(
+  //   files.reduce((acc: Record<string, number>, val: any) => ({ ...acc, [val.id]: (acc[val.id] ?? 0) + 1 }), {})
+  // );
   return (
     <div className="flex flex-col gap-4">
       {InfoCard}

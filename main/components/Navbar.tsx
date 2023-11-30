@@ -94,7 +94,7 @@ export function Navbar() {
       </button>
       {/* <a className={`mr-4 text-red-500`}> */}
         {/* Reset */}
-        <button className="shrink-0 py-1 bg-red-500 rounded w-16 mr-4" onClick={handleDelete}>
+        <button className={`shrink-0 py-1 rounded w-16 mr-4  ${isAdmin ? 'bg-red-500' : 'bg-gray-500 cursor-not-allowed'}`} onClick={handleDelete}>
         Reset
       </button>
       <div className="ml-auto flex">
