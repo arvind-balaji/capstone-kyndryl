@@ -16,9 +16,10 @@ RUN \
   fi
 
 # # Ensure Python is installed and set in npm configuration
-# RUN apk add --no-cache python3 # or python3 depending on your requirements
-# RUN pnpm config set python /usr/bin/python3 # or the path to your installed Python
-# ENV PATH="${PATH}:/usr/bin/python3"
+#RUN apk add --no-cache python3 # or python3 depending on your requirements
+RUN apt-get update && apt-get install -y python3 && rm -rf /var/lib/apt/lists/*
+RUN pnpm config set python /usr/bin/python3 # or the path to your installed Python
+ENV PATH="${PATH}:/usr/bin/python3"
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -31,10 +32,10 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN yarn build
+#RUN yarn build
 
 # If using npm comment out above and use below instead
-# RUN npm run build
+RUN npm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
