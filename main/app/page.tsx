@@ -39,7 +39,7 @@ export default function Home() {
         <li className="text-l">
           🐙
           <span className="ml-2">
-            Supported file extensions: 
+            Supported file extensions: pdf, docx, txt, json, srt, csv, xlsx, xls, url
           </span>
         </li>
       </ul>
