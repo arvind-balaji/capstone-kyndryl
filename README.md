@@ -1,26 +1,8 @@
 # README
-## How to run locally
 
+## Storing environment variables
 
-### Installation
-
-Install node.js version 20.9 and npm version 10.1.0
-
-Using npm, install pnpm using the command below:
-
-```
-npm install -g pnpm
-```
-
-Run the command below to install all required packages
-
-```
-pnpm i
-```
-
-### .env.local format
-
-See main/.env.example to format you .env.local file
+See main/.env.example to format your main/.env.local file
 
 Your main/.env.local should contain the following environment variables:
 
@@ -38,6 +20,24 @@ CHUNK_OVERLAP
 ```
 
 Copy .env.example to .env.local, replace credentials appropriately.
+
+## How to run locally
+
+### Installation
+
+Install node.js version 20.9 and npm version 10.1.0
+
+Using npm, install pnpm using the command below:
+
+```
+npm install -g pnpm
+```
+
+Run the command below to install all required packages
+
+```
+pnpm i
+```
 
 ### Run server
 
