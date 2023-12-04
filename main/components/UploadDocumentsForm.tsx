@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from 'next/navigation';
 import axios from "axios";
+import { read, utils } from 'xlsx';
+const path = require('path');
 
 export function UploadDocumentsForm() {
   const router = useRouter();
@@ -11,27 +13,93 @@ export function UploadDocumentsForm() {
     setFile(e.target.files[0]);
   };
 
+  const convertXlsx = (file: any) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onload = (e) => {
+        try {
+          const data = e.target.result;
+          const workbook = read(data, { type: 'binary' });
+  
+          let allCsvData = '';
+  
+          const promises = workbook.SheetNames.map(async (sheetName, index) => {
+            if (index > 0) {
+              // Add a newline between sheets
+              allCsvData += '\n';
+            }
+  
+            const formData = new FormData();
+            const csv = utils.sheet_to_csv(workbook.Sheets[sheetName]);
+            await formData.append('file', new Blob([csv], { type: 'text/csv' }), file.name + '_converted.csv');
+  
+            await axios.post('/api/retrieval/file_ingest', formData)
+              .then(res => {
+                console.log(res);
+              })
+              .catch(er => {
+                console.log(er);
+              });
+  
+            allCsvData += csv;
+          });
+  
+          Promise.all(promises)
+            .then(() => {
+              resolve(allCsvData);
+            })
+            .catch((error) => {
+              reject(error);
+            });
+        } catch (error) {
+          reject(error);
+        }
+      };
+  
+      reader.onerror = (error) => {
+        reject(error);
+      };
+  
+      reader.readAsBinaryString(file);
+    });
+  };
   const ingest = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    const formData = new FormData()
-    formData.append('file', file);
-    formData.append('chunkSize', String(process.env.NEXT_PUBLIC_CHUNK_SIZE));
-    axios.post('/api/retrieval/file_ingest', formData)
-    .then( res => {
-      console.log(res);
-      alert("Document uploaded successfully");
-      router.push("/retrieval");
-      setFile(null);
-      setIsLoading(false);
-    })
-    .catch(er => {
-      console.log(er);
-      setFile(null);
-      setIsLoading(false);
-    });
+    
+    const fileExtension = path.extname(file.name);
+    if (fileExtension === '.xlsx' || fileExtension === '.xls') {
+      try {
+        const csvData = await convertXlsx(file);
+        await alert('Document uploaded successfully');
+        await router.push('/retrieval');
+        setFile(null);
+      } catch (error) {
+        console.log('Error converting to csv:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      const formData = new FormData()
+      formData.append('file', file);
+    // formData.append('chunkSize', String(process.env.NEXT_PUBLIC_CHUNK_SIZE));
+      axios.post('/api/retrieval/file_ingest', formData)
+      .then( res => {
+        console.log(res);
+        alert("Document uploaded successfully");
+        router.push("/retrieval");
+        setFile(null);
+        setIsLoading(false);
+      })
+      .catch(er => {
+        console.log(er);
+        setFile(null);
+        setIsLoading(false);
+      });
+    }
   };
-
+  
   return (
     <form onSubmit={ingest} encType="multipart/form-data" className="flex justify-center w-full mb-4" method="POST">
       <input type="file" onChange={handleFileChange} className='grow mr-8 p-2 bg-white rounded' name="file"/>

@@ -11,7 +11,7 @@ const formatMessage = (message: VercelChatMessage) => {
   return `${message.role}: ${message.content}`;
 };
 
-const TEMPLATE = `You're an assistant. Answer in English as concisely as possible. Do your best to answer the questions. Feel free to use any tools available to look up relevant information, only if necessary.
+const TEMPLATE = `You're an assistant. Answer in English as concisely as possible. Do your best to answer the questions. Use the chat history if necessary, but try to use information from the document. Feel free to use any tools available to look up relevant information, only if necessary.
 
 Current conversation:
 {chat_history}

@@ -4,23 +4,17 @@ import { HtmlToTextTransformer } from "langchain/document_transformers/html_to_t
 import { createClient } from "@supabase/supabase-js";
 import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { IncomingForm } from 'formidable'
-import { promises as fs } from 'fs'
 import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
 
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
-    // const body = await req.json();
-    // const text = body.text;
-  
-  
     try {
       const formData = await req.formData();
   
       const url: URL | null = formData.get('url') as unknown as URL
       if (url) {
-        const loader = new CheerioWebBaseLoader(url);
+        const loader = new CheerioWebBaseLoader(url.toString());
         if (!loader)
           return NextResponse.json({ error: 'Unsupported URL' }, { status: 400 });
         const docs_ = await loader.load();
@@ -30,13 +24,20 @@ export async function POST(req: NextRequest) {
         const sequence = splitter.pipe(transformer);
 
         const docs = await sequence.invoke(docs_);
-        // console.log(docs);
+
         const textSplitter = new RecursiveCharacterTextSplitter({
           chunkSize: 512,
           chunkOverlap: 20,
         });
   
-        const splitDocs = await textSplitter.splitDocuments(docs);
+        const splitDocs = (await textSplitter.splitDocuments(docs))
+        .map((doc: { pageContent: string; metadata: any; }) => ({
+          pageContent: doc.pageContent, // Replace 'someTextProperty' with the actual property name containing the text
+          metadata: {
+            ...doc.metadata,
+            filename: url
+          }
+        }));
   
         const embeddings = new OpenAIEmbeddings({
           openAIApiKey: process.env.OPENAI_API_KEY,
@@ -46,8 +47,7 @@ export async function POST(req: NextRequest) {
           process.env.SUPABASE_URL!,
           process.env.SUPABASE_PRIVATE_KEY!,
         );
-  
-  
+
         const vectorstore = await SupabaseVectorStore.fromDocuments(
           splitDocs,
           embeddings,
@@ -57,12 +57,8 @@ export async function POST(req: NextRequest) {
             queryName: "match_documents",
           },
         );
-  
-        // console.log(docs)
       }
   
-  
-      // await writeFile("~/Documents/foo.pdf", Buffer.from(await file.arrayBuffer()));
       return NextResponse.json({ ok: true }, { status: 200 });
     } catch (e: any) {
       console.error(e);

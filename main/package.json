@@ -23,6 +23,7 @@
     "autoprefixer": "10.4.14",
     "axios": "^1.6.0",
     "cheerio": "1.0.0-rc.12",
+    "d3-dsv": "^2.0.0",
     "epub2": "^3.0.2",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
@@ -39,6 +40,7 @@
     "srt-parser-2": "^1.2.3",
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6",
+    "xlsx": "^0.18.5",
     "zod": "^3.22.3",
     "zod-to-json-schema": "^3.21.4"
   },

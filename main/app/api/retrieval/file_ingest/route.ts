@@ -1,29 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-
 import { createClient } from "@supabase/supabase-js";
 import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { IncomingForm } from 'formidable'
-import { promises as fs } from 'fs'
 import { TextLoader } from "langchain/document_loaders/fs/text";
 import { DocxLoader } from "langchain/document_loaders/fs/docx";
 import { JSONLoader } from "langchain/document_loaders/fs/json";
 import { SRTLoader } from "langchain/document_loaders/fs/srt";
-// import {writeFile} from 'fs'
+import { CSVLoader } from "langchain/document_loaders/fs/csv";
 
 export const runtime = "nodejs";
-
-// export const config = {
-//   api: {
-//     bodyParser: false,
-//   }
-// };
-
-// Before running, follow set-up instructions at
-// https://js.langchain.com/docs/modules/indexes/vector_stores/integrations/supabase
-
 /**
  * This handler takes input text, splits it into chunks, and embeds those chunks
  * into a vector store for later retrieval. See the following docs for more information:
@@ -32,10 +19,6 @@ export const runtime = "nodejs";
  * https://js.langchain.com/docs/modules/data_connection/vectorstores/integrations/supabase
  */
 export async function POST(req: NextRequest) {
-  // const body = await req.json();
-  // const text = body.text;
-
-
   try {
     const formData = await req.formData();
     console.log(formData)
@@ -56,6 +39,8 @@ export async function POST(req: NextRequest) {
           return new JSONLoader(blob)
         else if (file.type === 'application/x-subrip')
           return new SRTLoader(blob)
+        else if (file.type === 'text/csv')
+          return new CSVLoader(blob)
       })();
       if (!loader)
         return NextResponse.json({ error: 'Unsupported file type' }, { status: 400 });
@@ -90,12 +75,7 @@ export async function POST(req: NextRequest) {
           queryName: "match_documents",
         },
       );
-
-      // console.log(docs)
     }
-
-
-    // await writeFile("~/Documents/foo.pdf", Buffer.from(await file.arrayBuffer()));
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch (e: any) {
     console.error(e);
