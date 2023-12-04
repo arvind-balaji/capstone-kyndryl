@@ -6,21 +6,6 @@ import { UploadDocumentsForm } from "@/components/UploadDocumentsForm";
 import { URLUploadButton } from "@/components/URLUploadButton";
 import { GetServerSideProps } from "next";
 import { createClient } from "@supabase/supabase-js";
-
-
-// export const getFiles = cache(async () => {
-//   const client = createClient(
-//     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-//     process.env.NEXT_PUBLIC_SUPABASE_PRIVATE_KEY!,
-//   );
-//   const {data} = await client
-//   .from("documents")
-//   .select()
-
-//   console.log(data)
-
-//   return data
-// })
  
 export default function AgentsPage() {
   const [showFile, setShowFile] = useState(false);

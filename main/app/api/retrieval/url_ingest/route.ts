@@ -47,8 +47,7 @@ export async function POST(req: NextRequest) {
           process.env.SUPABASE_URL!,
           process.env.SUPABASE_PRIVATE_KEY!,
         );
-  
-  
+
         const vectorstore = await SupabaseVectorStore.fromDocuments(
           splitDocs,
           embeddings,
@@ -58,7 +57,6 @@ export async function POST(req: NextRequest) {
             queryName: "match_documents",
           },
         );
-  
       }
   
       return NextResponse.json({ ok: true }, { status: 200 });
