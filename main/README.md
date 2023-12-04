@@ -110,6 +110,12 @@ When ready, you can deploy your app on the [Vercel Platform](https://vercel.com/
 
 Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
+## Docker
+```
+cd main
+docker build --no-cache -t capstone .
+docker run -p 3000:3000 --env-file .env.local capstone
+```
 ## Thank You!
 
 Thanks for reading! If you have any questions or comments, reach out to us on Twitter
